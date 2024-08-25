@@ -1,5 +1,5 @@
 <?php
-$paginaActual = 'inicio'; // Cambia esto según el archivo
+$paginaActual = 'inicio';
 require_once 'plantillas/funciones.php';
 $tituloPagina = obtenerTituloPagina($paginaActual);
 include 'plantillas/encabezado.php';
@@ -11,5 +11,3 @@ include 'plantillas/encabezado.php';
 <?php
 include 'plantillas/pie_pagina.php';
 ?>
-
-http://localhost/TALLERES/TALLER_2/SISTEMA_PLANTILLAS/inicio.php
