@@ -52,8 +52,8 @@ foreach ($carrito as $producto => $cantidad) {
 
 echo "</table>";
 
-echo "<p><strong>Subtotal:</strong> \$" . number_format($subtotal, 2) . "</p>";
-echo "<p><strong>Descuento:</strong> -\$" . number_format($descuento, 2) . "</p>";
-echo "<p><strong>Impuesto:</strong> +\$" . number_format($impuesto, 2) . "</p>";
-echo "<p><strong>Total a pagar:</strong> \$" . number_format($total, 2) . "</p>";
+echo "<strong>Subtotal:</strong> \$" . number_format($subtotal, 2);
+echo "<strong>Descuento:</strong> -\$" . number_format($descuento, 2);
+echo "<strong>Impuesto:</strong> +\$" . number_format($impuesto, 2);
+echo "<strong>Total a pagar:</strong> \$" . number_format($total, 2);
 ?>
