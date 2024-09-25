@@ -18,32 +18,130 @@ $filterEstado = isset($_GET['filterEstado']) ? $_GET['filterEstado'] : '';
 
 $tareas = null;
 
+$estadosLegibles = [
+    'pendiente' => 'Pendiente',
+    'en_progreso' => 'En Progreso',
+    'completada' => 'Completada'
+];
+
+$prioridadesLegibles = [
+    1 => 'Alta',
+    2 => 'Media alta',
+    3 => 'Media',
+    4 => 'Media baja',
+    5 => 'Baja'
+];
+
 // Procesar la acción
 switch ($action) {
     case 'add':
-        // Los estudiantes deben implementar esta lógica
+        $datos = [
+            'id' => uniqid(),
+            'titulo' => $_GET['titulo'],
+            'descripcion' => $_GET['descripcion'],
+            'estado' => 'pendiente',
+            'prioridad' => $_GET['prioridad'],
+            'fechaCreacion' => date('Y-m-d'),
+            'tipo' => $_GET['tipo']
+        ];
+        
+        switch ($_GET['tipo']) {
+            case 'desarrollo':
+            $datos['lenguajeProgramacion'] = $_GET['lenguajeProgramacion'];
+            $tarea = new TareaDesarrollo($datos);
+                break;
+            case 'diseno':
+                $datos['herramientaDiseno'] = $_GET['herramientaDiseno'];
+                $tarea = new TareaDiseno($datos);
+                break;
+            case 'testing':
+                $datos['tipoTest'] = $_GET['tipoTest'];
+                $tarea = new TareaTesting($datos);
+                break;
+            }
+        
+            $gestorTareas->agregarTarea($tarea);
+            header("Location: index.php");
+            break;
         break;
 
-    case 'edit':
-        // Los estudiantes deben implementar esta lógica
+        case 'edit':
+            $tareaExistente = null;
+            
+            // Busca la tarea por su ID
+            foreach ($gestorTareas->listarTareas() as $tarea) {
+                if ($tarea->id == $_GET['id']) {
+                    $tareaExistente = $tarea;
+                    break;
+                }
+            }
+        
+            if ($tareaExistente) {
+                $tareaExistente->titulo = $_GET['titulo'];
+                $tareaExistente->descripcion = $_GET['descripcion'];
+                $tareaExistente->prioridad = $_GET['prioridad'];
+                
+                // Solo actualiza los detalles específicos si corresponden
+                switch ($tareaExistente->tipo) {
+                    case 'desarrollo':
+                        $tareaExistente->lenguajeProgramacion = $_GET['lenguajeProgramacion'];
+                        break;
+                    case 'diseno':
+                        $tareaExistente->herramientaDiseno = $_GET['herramientaDiseno'];
+                        break;
+                    case 'testing':
+                        $tareaExistente->tipoTest = $_GET['tipoTest'];
+                        break;
+                }
+        
+                $gestorTareas->actualizarTarea($tareaExistente);
+            }
+            
+            header("Location: index.php");
         break;
+        
 
     case 'delete':
-        // Los estudiantes deben implementar esta lógica
+        $id = $_GET['id'];
+            
+            // Llama al método eliminarTarea del gestor
+        $gestorTareas->eliminarTarea($id);
+            
+        header("Location: index.php");
         break;
-
+        
     case 'status':
-        // Los estudiantes deben implementar esta lógica
+        $id = $_GET['id'];
+        $nuevoEstado = $_GET['estado'];
+        
+            // Actualiza el estado de la tarea
+        $gestorTareas->actualizarEstadoTarea($id, $nuevoEstado);
+        
+        header("Location: index.php");
         break;
-
+        
     case 'filter':
-        // Los estudiantes deben implementar esta lógica
+        $estado = $_GET['estado'];
+        $tareasFiltradas = $gestorTareas->buscarTareasPorEstado($estado);
+            
         break;
 
     case 'list':
-    default:
-        // Por ahora, simplemente cargamos todas las tareas
-        break;
+        $estado = $_GET['estado'] ?? '';
+        
+            // Si hay filtro de estado, lista tareas con ese estado
+        if (!empty($estado)) {
+            $tareas = $gestorTareas->listarTareas($estado);
+        } else {
+                // Si no hay filtro, lista todas las tareas
+            $tareas = $gestorTareas->listarTareas();
+        }
+        
+            // Muestra las tareas (puedes imprimirlas directamente aquí o manejarlo de otra forma)
+        foreach ($tareas as $tarea) {
+            echo "<p>Tarea: {$tarea->titulo}, Estado: {$tarea->estado}</p>";
+        }
+            break;
 }
 
 // Cargar las tareas si aún no se han cargado
@@ -163,6 +261,7 @@ if ($tareas === null) {
                         <td><?php echo $tarea->prioridad; ?></td>
                         <td><?php echo $tarea->tipo; ?></td>
                         <td><?php echo $tarea->fechaCreacion; ?></td>
+                        <td><?php echo $tarea->obtenerDetallesEspecificos(); ?></td>
                         <td>
                             <a href='index.php?action=edit&id=<?php echo $tarea->id; ?>' class='btn btn-sm btn-warning'><i class='fas fa-edit'></i></a>
                             <a href='index.php?action=delete&id=<?php echo $tarea->id; ?>' class='btn btn-sm btn-danger' onclick="return confirm('¿Está seguro de que desea eliminar esta tarea?');"><i class='fas fa-trash'></i></a>
