@@ -6,7 +6,7 @@ $productos = [
     'pantalon' => 70,
     'zapatos' => 80,
     'calcetines' => 10,
-    'gorra' => 25
+    'gorras' => 25
 ];
 
 $carrito = [
@@ -14,7 +14,7 @@ $carrito = [
     'pantalon' => 1,
     'zapatos' => 1,
     'calcetines' => 3,
-    'gorra' => 0
+    'gorras' => 0
 ];
 
 $subtotal = 0;

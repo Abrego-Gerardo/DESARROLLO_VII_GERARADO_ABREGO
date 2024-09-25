@@ -2,7 +2,7 @@
 include 'utilidades_texto.php';
 
 $frases = [
-    "Desarrollo de Software", "Redes De Computradora.", "El que depende de otros."
+    "Desarrollo de Software", "Redes De Computradora.","El que depende de otros."
 ];
 
 echo "<table border='1'>
