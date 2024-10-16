@@ -1,6 +1,14 @@
 <?php
 require_once "config_pdo.php";
 
+// Función para registrar errores
+function log_error($message) {
+    $error_log = 'error_log.txt';
+    $current_time = date('Y-m-d H:i:s');
+    $error_message = $current_time . " - " . $message . PHP_EOL;
+    file_put_contents($error_log, $error_message, FILE_APPEND);
+}
+
 try {
     $pdo->beginTransaction();
 
@@ -8,6 +16,9 @@ try {
     $sql = "INSERT INTO usuarios (nombre, email) VALUES (:nombre, :email)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':nombre' => 'Nuevo Usuario', ':email' => 'nuevo@example.com']);
+    if ($stmt->errorCode() !== '00000') {
+        throw new Exception("Error en la consulta de usuario: " . $stmt->errorInfo()[2]);
+    }
     $usuario_id = $pdo->lastInsertId();
 
     // Insertar una publicación para ese usuario
@@ -18,11 +29,15 @@ try {
         ':titulo' => 'Nueva Publicación',
         ':contenido' => 'Contenido de la nueva publicación'
     ]);
+    if ($stmt->errorCode() !== '00000') {
+        throw new Exception("Error en la consulta de publicación: " . $stmt->errorInfo()[2]);
+    }
 
     $pdo->commit();
     echo "Transacción completada con éxito.";
 } catch (Exception $e) {
     $pdo->rollBack();
     echo "Error en la transacción: " . $e->getMessage();
+    log_error($e->getMessage());
 }
 ?>
