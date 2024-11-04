@@ -1,0 +1,8 @@
+Paso 1: http://localhost/TALLERES/TALLER_9/subconsultas_mysqli.php
+Paso 2: http://localhost/TALLERES/TALLER_9/vistas_mysqli.php
+Paso 3: http://localhost/TALLERES/TALLER_9/procedimientos_mysqli.php
+Paso 4:
+Paso 5:
+Paso 6:
+Paso 7:
+Paso 8:
