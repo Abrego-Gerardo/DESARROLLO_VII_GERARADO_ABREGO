@@ -1,0 +1,4 @@
+Búsqueda Avanzada: http://localhost/TALLERES/TALLER_10/advanced_search.php
+Búsqueda de Código: http://localhost/TALLERES/TALLER_10/code_search.php
+Gestión de Estrellas: http://localhost/TALLERES/TALLER_10/starred_repos.php
+Gestión de Seguidores: http://localhost/TALLERES/TALLER_10/followers.php
